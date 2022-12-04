@@ -31,16 +31,12 @@ import java.util.LinkedList;
         with variable, chose able size as integer
      */
     public class HashTable implements IntStringMap {
-        private int size;
+        private final int size;
         private LinkedList<KeyValuePair>[] hashtable;
 
         // Getter
         public int getSize() {
             return size;
-        }
-
-        public void setHashtable(LinkedList<KeyValuePair>[] hashtable) {
-            this.hashtable = hashtable;
         }
 
         // Constructor hashtable with size and array of linked-list with KeyValuePairs
@@ -95,25 +91,21 @@ import java.util.LinkedList;
                 }
 
             if (capacy + 2 == hashtable.length) {
-                HashTable newHashTable;
+                LinkedList<KeyValuePair>[] newHashTable;
                 newHashTable = reFactorHashtable(hashtable, hashtable.length);
                 hashtable = newHashTable;
-                //hashtable.setHashtable = newHashTable;
-                System.out.println(newHashTable.getSize());
+                System.out.println(newHashTable.length);
 
             }
-            if (hashtable[index] == null) {
             /*
             In case the index in the array (hashtable) is null, there will be
             a new empty linked-list created, in witch there can be new Key-Value-Objects
             generated and saved
-             */
+            */
+            if (hashtable[index] == null)
                 hashtable[index] = new LinkedList<>();
-            }
 
-        /*
-          checks if the key already exists info @ checkAndRemove
-         */
+            //checks if the key already exists info @ checkAndRemove
             String value = checkAndRemove(key, index);
             // Generates and adds a new Key-Value-Pair to hashtable
             LinkedList<KeyValuePair> list = hashtable[index];
@@ -162,17 +154,24 @@ import java.util.LinkedList;
             return null;
         }
         // Bonus
-        private HashTable reFactorHashtable(LinkedList<KeyValuePair>[] old, int oldCapacy){
-            HashTable newHashTable = new HashTable(nextPrime(oldCapacy));
-            for (int i = 0; i <= old.length-1; i ++){
+        private LinkedList<KeyValuePair>[] reFactorHashtable(LinkedList<KeyValuePair>[] old, int oldCapacy){
+            @SuppressWarnings("unchecked")
+            LinkedList<KeyValuePair>[] newHashTable = new LinkedList[nextPrime(oldCapacy)];
+            for (int i = 0; i < old.length; i ++){
                 LinkedList<KeyValuePair> list = hashtable[i];
                 for (int j = 0; j <= old.length; j++) {
                     if (hashtable[i] != null) {
                         if (list.size() == j)
                             break;
                         KeyValuePair kvp = list.get(j);
-                        System.out.println(newHashTable.put(kvp.getKey(), kvp.getValue()));
-
+                        int key = kvp.getKey();
+                        String value = kvp.getValue();
+                        if (newHashTable[hashFunction(kvp.getKey())] == null)
+                            newHashTable[hashFunction(kvp.getKey())] = new LinkedList<>();
+                        LinkedList<KeyValuePair> newList = newHashTable[hashFunction(kvp.getKey())];
+                        KeyValuePair add = new KeyValuePair(key, value);
+                        newList.add(add);
+                        System.out.println("Hinzugefügt bei key; "+key+" at index: "+hashFunction(kvp.getKey())+" "+value);
                     }
                 }
             }
@@ -188,6 +187,5 @@ import java.util.LinkedList;
             }
             return num;
         }
-
     }
 
