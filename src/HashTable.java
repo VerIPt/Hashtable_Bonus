@@ -31,7 +31,7 @@ import java.util.LinkedList;
         with variable, chose able size as integer
      */
     public class HashTable implements IntStringMap {
-        private final int size;
+        private int size;
         private LinkedList<KeyValuePair>[] hashtable;
 
         // Getter
@@ -86,7 +86,6 @@ import java.util.LinkedList;
             // checking capacy of hashTable
             for (LinkedList<KeyValuePair> keyValuePairs : hashtable)
                 if (keyValuePairs != null) {
-                    //System.out.println(capacy);
                     capacy++;
                 }
 
@@ -94,7 +93,7 @@ import java.util.LinkedList;
                 LinkedList<KeyValuePair>[] newHashTable;
                 newHashTable = reFactorHashtable(hashtable, hashtable.length);
                 hashtable = newHashTable;
-                System.out.println(newHashTable.length);
+                System.out.println(size = newHashTable.length);
 
             }
             /*

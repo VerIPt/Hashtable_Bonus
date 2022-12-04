@@ -18,6 +18,7 @@ public class Main {
         for (int i = 0; i <= 11; i++) {
             System.out.println("Add to key " + i + ": " + ht.put(i, Integer.toString(i)));
         }
+
         System.out.println(ht.getSize());
         System.out.println("Add to key 12334: " + ht.put(12334, "lala luna"));
         System.out.println("Add to key 98873: " + ht.put(98873, "Hugo Hafer "));
@@ -32,6 +33,11 @@ public class Main {
         ht.get(98873);
         ht.put(98873, "Ingo Igel ");
         System.out.println(ht.getSize());
+
+        for (int i = 0; i <= 15; i++) {
+            System.out.println("Add to key " + i + ": " + ht.put(i, Integer.toString(i)));
+        }
+
 
     }
 }
