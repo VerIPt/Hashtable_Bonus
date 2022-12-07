@@ -28,11 +28,12 @@ class KeyValuePair {
 
 /*
     Class hashtable with linked-lists as an array for implementation
-    with variable, chose able size as an integer
+    with variable, choose-able size as an integer
  */
 public class HashTable implements IntStringMap {
     private int size;
     private int capacy;
+
     private LinkedList<KeyValuePair>[] hashtable;
 
     // Getter
@@ -42,6 +43,10 @@ public class HashTable implements IntStringMap {
 
     public int getCapacy() {
         return capacy;
+    }
+
+    public int getIndex(Integer key) {
+        return hashFunction(key);
     }
 
     // Constructor hashtable with size and array of linked-list with KeyValuePairs
@@ -59,6 +64,7 @@ public class HashTable implements IntStringMap {
 
     /**
      * Method for factorisation the Hashtable to more capacy
+     *
      * @param old       = Linked list of KeyValuePairs -> hashtable
      * @param oldCapacy = int with the capacy of the hashtable filled over a certain amount of %
      * @return Linked list of KeyValuePairs
@@ -77,7 +83,7 @@ public class HashTable implements IntStringMap {
                     if (list.size() == j)   // to avoid out-of-bounds-exception
                         break;
                     KeyValuePair kvp = list.get(j);
-                    int index = hashFunction(kvp.getKey());
+                    int index = Math.abs(Integer.hashCode(kvp.getKey()) % nextPrime(oldCapacy));
                     if (newHashTable[index] == null)              // to avoid null-pointer-exception
                         newHashTable[index] = new LinkedList<>();
                     LinkedList<KeyValuePair> newList = newHashTable[index];
@@ -88,6 +94,7 @@ public class HashTable implements IntStringMap {
         }
         return newHashTable;
     }
+
     // method for calculating prime numbers
     private int nextPrime(int num) {
         num++;
@@ -102,6 +109,7 @@ public class HashTable implements IntStringMap {
 
     /**
      * Method for checking keys and removing them if found
+     *
      * @param key   = Integer
      * @param index = int
      * @return = removed Value or if not available null
@@ -125,10 +133,13 @@ public class HashTable implements IntStringMap {
         return value;
     }
     // Interface-implementation:
+
     /**
      * {@link  IntStringMap#put(Integer, String)}
-     * Method for adding new Key-Value-pairs to the hashtable. With included function
-     * to avoid doubled keys, in that case the key is saved with the new given value
+     * Method for adding new Key-Value-pairs to the hashtable. With included functions to refactor the hashtable
+     * to the size of the next prime number from given size, when 80% of the array is occupied. And a function
+     * that iterates through the linked list to check if the key already exists, saves the key with the new
+     * value and returns the old value
      */
     public String put(Integer key, String newValue) {
         int index = hashFunction(key);
@@ -140,7 +151,7 @@ public class HashTable implements IntStringMap {
             hashtable[index] = new LinkedList<>();
             capacy++;
         }
-        String value = checkAndRemove(key, index);        //checks if the key already exists info @ checkAndRemove
+        String value = checkAndRemove(key, index);        // checks if the key already exists info @ checkAndRemove
         LinkedList<KeyValuePair> list = hashtable[index]; // Generates and adds a new Key-Value-Pair to hashtable
         KeyValuePair add = new KeyValuePair(key, newValue);
         list.add(add);
@@ -176,7 +187,6 @@ public class HashTable implements IntStringMap {
     public String remove(Integer key) {
         int index = hashFunction(key);
         if (hashtable[index] != null) {
-            System.out.println(checkAndRemove(key, index));
             return checkAndRemove(key, index);
         }
         return null;
